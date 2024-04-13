@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Box, VStack, Heading, Text, Input, Button } from "@chakra-ui/react";
+import { Box, VStack, Heading, Text, Input, Button, HStack, Spacer, Checkbox, IconButton } from "@chakra-ui/react";
+import { FaTrash } from "react-icons/fa";
 
 let id = 0;
 function generateId() {
@@ -22,43 +23,54 @@ const Index = () => {
     }
   };
 
+  const handleDeleteTodo = (id) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+  };
+
   return (
-    <Box bg="blue.50" minH="100vh">
-      <VStack spacing={8} py={12}>
-        {}
-        <Heading as="h1" color="blue.800" size="2xl">
+    <Box>
+      {}
+      <Box bg="blue.600" py={8}>
+        <Heading as="h1" color="white" textAlign="center">
           My Todo List
         </Heading>
+      </Box>
 
+      {}
+      <Box maxW="500px" mx="auto" mt={8}>
         {}
-        <Box bg="white" p={6} borderRadius="lg" boxShadow="md" w="lg">
-          <Heading as="h2" size="lg" mb={4} color="blue.600">
-            Add a new todo
-          </Heading>
-          <Input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Enter a new todo" mb={4} />
+        <HStack mb={8}>
+          <Input value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder="Enter a new todo" />
           <Button onClick={handleAddTodo} colorScheme="blue">
             Add
           </Button>
+        </HStack>
+
+        {}
+        <VStack spacing={4} align="stretch">
           {todos.map((todo) => (
-            <Box key={todo.id} mt={4} display="flex" alignItems="center">
-              <input
-                type="checkbox"
-                checked={todo.completed}
+            <HStack key={todo.id} spacing={4}>
+              <Checkbox
+                isChecked={todo.completed}
                 onChange={() => {
                   const updatedTodos = todos.map((t) => (t.id === todo.id ? { ...t, completed: !t.completed } : t));
                   setTodos(updatedTodos);
                 }}
               />
-              <Text ml={2} textDecoration={todo.completed ? "line-through" : "none"}>
+              <Text flex={1} textDecoration={todo.completed ? "line-through" : "none"}>
                 {todo.text}
               </Text>
-            </Box>
+              <IconButton icon={<FaTrash />} aria-label="Delete todo" onClick={() => handleDeleteTodo(todo.id)} />
+            </HStack>
           ))}
-        </Box>
+        </VStack>
+      </Box>
 
-        {/* Footer */}
-        <Text color="blue.500">Created with GPT Engineer</Text>
-      </VStack>
+      {}
+      <Box mt={12} textAlign="center" color="gray.500">
+        <Text>Created with GPT Engineer</Text>
+      </Box>
     </Box>
   );
 };
