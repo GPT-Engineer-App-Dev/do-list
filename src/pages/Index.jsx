@@ -15,6 +15,7 @@ const Index = () => {
       const newTodo = {
         id: generateId(),
         text: inputValue,
+        completed: false,
       };
       setTodos([...todos, newTodo]);
       setInputValue("");
@@ -39,9 +40,19 @@ const Index = () => {
             Add
           </Button>
           {todos.map((todo) => (
-            <Text key={todo.id} mt={4}>
-              {todo.text}
-            </Text>
+            <Box key={todo.id} mt={4} display="flex" alignItems="center">
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => {
+                  const updatedTodos = todos.map((t) => (t.id === todo.id ? { ...t, completed: !t.completed } : t));
+                  setTodos(updatedTodos);
+                }}
+              />
+              <Text ml={2} textDecoration={todo.completed ? "line-through" : "none"}>
+                {todo.text}
+              </Text>
+            </Box>
           ))}
         </Box>
 
